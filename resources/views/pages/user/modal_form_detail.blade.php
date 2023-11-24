@@ -11,7 +11,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Nama Lengkap</label>
-                                <input type="text" class="form-control" id="detail_name" name="name" disabled>
+                                <input type="text" class="form-control" id="detail_name" name="name" readonly>
                             </div>
                         </div>
                     </div>
@@ -19,7 +19,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Username</label>
-                                <input type="text" class="form-control" id="detail_username" name="username" disabled>
+                                <input type="text" class="form-control" id="detail_username" name="username" readonly>
                             </div>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>No Telp</label>
-                                <input type="text" class="form-control" id="detail_phone" name="phone" disabled>
+                                <input type="text" class="form-control" id="detail_phone" name="phone" readonly>
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Alamat</label>
-                                <input type="text" class="form-control" id="detail_address" name="address" disabled>
+                                <input type="text" class="form-control" id="detail_address" name="address" readonly>
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Role</label>
-                                <input type="text" class="form-control" id="detail_role_name" name="role_name" disabled>
+                                <input type="text" class="form-control" id="detail_role_name" name="role_name" readonly>
                             </div>
                         </div>
                     </div>

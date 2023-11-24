@@ -18,9 +18,6 @@ class CreateUserTeamsTable extends Migration
             $table->foreignUuid('team_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('team_id')->references('id')->on('teams');
-            $table->string('position');
-            $table->date('start_date');
-            $table->date('end_date')->nullable();
         });
     }
 

@@ -1,0 +1,110 @@
+
+.col-img-login{
+    background: #000F1F;
+}
+
+.col-img-login img{
+    height: 100vh;
+    width: auto;
+}
+
+.col-form-login{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    top: -2rem;
+    background: #fff;
+}
+
+.col-form-login img{
+    margin: 0 auto 6rem auto;
+}
+
+.col-form-login .form-login{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    
+    margin: 0 5rem;
+}
+
+.col-form-login .form-login h1{
+    font-weight: 700;
+    font-size: 22pt;
+}
+
+.col-form-login .form-login p{
+    font-size: 12pt;
+}
+
+.col-form-login .form-login form{
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.col-form-login .form-login .form-group label{
+    font-size: 12pt;
+}
+
+.col-form-login .form-login button{
+    border-radius: 50px;
+}
+
+.col-form-login img{
+    width: 15%;
+}
+
+.input-with-eye{
+    border-right: 0;
+}
+
+.eye-addon{
+    background: white;
+    border: 1px #ced4da;
+    border-style: solid solid solid none;
+    border-radius: 10px;
+}
+
+.eye-addon-icon{
+    color: #000;
+}
+
+@media only screen and (max-width: 1000px) {
+    .col-img-login{
+        display: none;
+    }
+
+    .col-form-login {
+        top: 0rem;
+    }
+
+    .col-form-login img {
+        width: 50%;
+        margin: 5rem auto;
+    }
+
+    .col-form-login .form-login{
+        margin: 0 3rem;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .col-img-login{
+        display: none;
+    }
+
+    .col-form-login {
+        top: 0rem;
+    }
+
+    .col-form-login img {
+        width: 75%;
+        margin: 2rem auto;
+    }
+
+    .col-form-login .form-login{
+        margin: 0 3rem;
+    }
+}

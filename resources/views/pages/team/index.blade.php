@@ -8,42 +8,43 @@
             <div class="top-table">
                 <div class="row">
                     <div class="col-4 left">
-                        <input type="text" class="form-control" id="txt-table-filter" placeholder="Cari Nama Pengguna">
+                        <input type="text" class="form-control" id="txt-table-filter" placeholder="Cari Nama Team">
                         <button type="button" class="btn btn-sm btn-search" id="btn-search"><span class="material-icons-sharp">search</span></button>
                     </div>
-                    <div class="col-8 right">
-                        <button type="button" class="btn btn-primary btn-curved" data-toggle="modal" data-target="#addUserModal">Tambah Pengguna</button>
-                    </div>
+                    @can ('isAdmin')
+                        <div class="col-8 right">
+                            <button type="button" class="btn btn-primary btn-curved" data-toggle="modal" data-target="#addTeamModal">Tambah Team</button>
+                        </div>
+                    @endcan
                 </div>
             </div>
             <div class="tab-table">
-                <table id="dtTableUser" class="table table-borderless table-sm table-students" cellspacing="0" width="100%">
+                <table id="dtTableTeam" class="table table-borderless table-sm table-students" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th class="th-sm">No</th>
                             <th class="th-sm">Nama</th>
-                            <th class="th-sm">Username</th>
-                            <th class="th-sm">No Telp</th>
-                            <th class="th-sm">Role</th>
+                            <th class="th-sm">Jumlah Anggota</th>
                             <th class="th-sm">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($list_users as $key=>$user)
+                        @foreach ($list_teams as $key=>$team)
                             <tr>
                                 <td>{{ $key+1 }}</td>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->username }}</td>
-                                <td>{{ $user->phone == null ? '-' : $user->phone }}</td>
-                                <td>{{ $user->role->name }}</td>
+                                <td>{{ $team->name }}</td>
+                                <td>{{ count($team->user_teams) }}</td>
                                 <td>
                                     <a class="nav-link nav-edit" href="#" data-toggle="dropdown" aria-expanded="false">
                                         <img class="avatar avatar-sm rounded-circle td-btn edit" alt="Icon Pencil" src="{{ url('assets/images/icon/icon-action-dropdown.svg') }}">
                                     </a>
                                     <ul class="dropdown-menu dropdown-edit">
-                                        <li><a class="dropdown-item btn-detail" href="#" data-toggle="modal" data-target="#detailUserModal" data-id="{{ $user->id }}">Detail Data</a></li>
-                                        <li><a class="dropdown-item btn-edit" href="#" data-toggle="modal" data-target="#editUserModal" data-id="{{ $user->id }}">Ubah Data</a></li>
-                                        <li><a class="dropdown-item btn-delete" href="#" data-id="{{ $user->id }}" style="color:red">Hapus Data</a></li>
+                                        <li><a class="dropdown-item btn-detail" href="#" data-toggle="modal" data-target="#detailTeamModal" data-id="{{ $team->id }}">Detail Data</a></li>
+                                        
+                                        @can ('isAdmin')
+                                            <li><a class="dropdown-item btn-edit" href="#" data-toggle="modal" data-target="#editTeamModal" data-id="{{ $team->id }}">Ubah Data</a></li>
+                                            <li><a class="dropdown-item btn-delete" href="#" data-id="{{ $team->id }}" style="color:red">Hapus Data</a></li>
+                                        @endcan
                                     </ul>
                                 </td>
                             </tr>
@@ -54,10 +55,12 @@
                 </table>
             </div>
             <!-- Modal -->
-            @include('pages.user.modal_form_add')
-            @include('pages.user.modal_form_edit')
-            @include('pages.user.modal_form_detail')
-            
+            @include('pages.team.modal_form_detail')
+
+            @can ('isAdmin')
+                @include('pages.team.modal_form_add')
+                @include('pages.team.modal_form_edit')
+            @endcan
         </div>
     </div>
 </div>
@@ -66,7 +69,7 @@
 
     $(document).ready(function () {
 
-        var tableUser = $('#dtTableUser').DataTable({
+        var tableTeam = $('#dtTableTeam').DataTable({
             dom: 'lrtip',
             language: {
             paginate: {
@@ -78,8 +81,6 @@
             aoColumns : [
                 { sWidth: '5%' },
                 { sWidth: '15%' },
-                { sWidth: '10%' },
-                { sWidth: '10%' },
                 { sWidth: '15%' },
                 { sWidth: '5%' }
             ]
@@ -90,11 +91,11 @@
             // get result by regex
             var searchTerm = searchText.toLowerCase();
             var regex = '\\b' + searchTerm + '.*';
-            tableUser.search(regex, true, false).draw();
+            tableTeam.search(regex, true, false).draw();
         });
 
-        $('#dtTableUser').on( 'click', 'tr', function () {
-            $("#row_index").val(tableUser.row( this ).index());
+        $('#dtTableTeam').on( 'click', 'tr', function () {
+            $("#row_index").val(tableTeam.row( this ).index());
         });
     });
 
@@ -111,7 +112,7 @@
         var id = $("#id").val();
         $.ajax({
             type:'GET',
-            url:'user/' + id,
+            url:'team/' + id,
             success:function(response){
                 if(response.message != 'success'){
                     Swal.fire({
@@ -120,11 +121,19 @@
                     })
                 }else{
                     var data = response.data
-                    $("#edit_name").val(data.name);
-                    $("#edit_username").val(data.username);
-                    $("#edit_phone").val(data.phone);
-                    $("#edit_address").val(data.address);
-                    $("#edit_role_id").val(data.role_id);
+                    $("#edit_name").val(data.team.name);
+
+                    $('#selectUsersEdit').empty();
+
+                    data.list_users.forEach((element) => {
+                        if(data.list_selected_users.includes(element.id)){
+                            $('#selectUsersEdit').append("<option value='"+ element.id +"' selected='selected'>"+ element.name + "</option>");
+                        }else{
+                            $('#selectUsersEdit').append("<option value='"+ element.id +"'>"+ element.name + "</option>");
+                        }
+                    });
+
+                    $('#selectUsersEdit').trigger('change'); 
                 }
             },
         });
@@ -142,7 +151,7 @@
 
         $.ajax({
             type:'GET',
-            url:'user/' + id,
+            url:'team/' + id,
             success:function(response){
                 if(response.message != 'success'){
                     Swal.fire({
@@ -151,11 +160,18 @@
                     })
                 }else{
                     var data = response.data
-                    $("#detail_name").val(data.name);
-                    $("#detail_username").val(data.username);
-                    $("#detail_phone").val(data.phone);
-                    $("#detail_address").val(data.address);
-                    $("#detail_role_name").val(data.role.name);
+                    $("#detail_name").val(data.team.name);
+                    
+                    $('#selectUsersDetail').empty();
+                    data.list_users.forEach((element) => {
+                        if(data.list_selected_users.includes(element.id)){
+                            $('#selectUsersDetail').append("<option value='"+ element.id +"' selected='selected'>"+ element.name + "</option>");
+                        }else{
+                            $('#selectUsersDetail').append("<option value='"+ element.id +"'>"+ element.name + "</option>");
+                        }
+                    });
+
+                    $('#selectUsersDetail').trigger('change'); 
                 }
             },
         });
@@ -179,7 +195,7 @@
 
                 $.ajax({
                     type:'DELETE',
-                    url:"{{ route('deleteUser') }}",
+                    url:"{{ route('deleteTeam') }}",
                     data:{id: id, _token: '{{csrf_token()}}' },
                     success:function(response){
                         if(response.message == 'failed'){

@@ -11,6 +11,7 @@ class Team extends Model
 
     protected $table = 'teams';
     protected $keyType = 'string';
+    protected $guarded = [];
     
     public function user_teams()
     {

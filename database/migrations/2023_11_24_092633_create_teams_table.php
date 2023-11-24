@@ -17,7 +17,7 @@ class CreateTeamsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->date('established_date');
-            $table->boolean('is_active')->default(1);
+            $table->boolean('is_deleted')->default(0);
             $table->timestamps();
         });
     }

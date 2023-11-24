@@ -10,6 +10,9 @@ class UserTeam extends Model
     use HasFactory;
 
     protected $table = 'user_teams';
+    protected $guarded = [];
+    public $timestamps = false;
+    protected $keyType = 'string';
     
     public function user()
     {

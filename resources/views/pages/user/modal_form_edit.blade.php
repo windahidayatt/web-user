@@ -83,7 +83,6 @@
             processData: false,
             contentType: false,
             success:function(response){
-                console.log(response)
                 if(response.message != 'success'){
                     Swal.fire({
                         icon: 'error',
@@ -93,10 +92,12 @@
                     $('#editUserModal').modal('hide')
                     var data = response.data
                     var idx_row = parseInt($('#row_index').val());
-                    var tableJapanAssociation = $("#dtTableUser").DataTable().row(idx_row)
-                    tableJapanAssociation.cell(idx_row, 0).data(idx_row + 1).draw()
-                    tableJapanAssociation.cell(idx_row, 1).data(data.name).draw()
-                    tableJapanAssociation.cell(idx_row, 2).data(data.role_name).draw()
+                    var tableUser = $("#dtTableUser").DataTable().row(idx_row)
+                    tableUser.cell(idx_row, 0).data(idx_row + 1).draw()
+                    tableUser.cell(idx_row, 1).data(data.name).draw()
+                    tableUser.cell(idx_row, 2).data(data.username).draw()
+                    tableUser.cell(idx_row, 3).data(data.phone).draw()
+                    tableUser.cell(idx_row, 4).data(data.role_name).draw()
                 }
                 
             },
