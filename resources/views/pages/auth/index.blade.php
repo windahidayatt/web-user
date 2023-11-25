@@ -29,9 +29,6 @@
                     </div>
                 </div>
                   
-                <div class="form-group d-flex flex-row-reverse mt-4">
-                    <a href="#" class="a-forgot-password">Lupa Password?</a>
-                </div>
                 <button type="submit" class="btn btn-primary btn-block mt-5">Login</button>
             </form>
         </div>

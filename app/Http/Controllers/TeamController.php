@@ -8,7 +8,6 @@ use App\Models\UserTeam;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class TeamController extends Controller
@@ -20,18 +19,27 @@ class TeamController extends Controller
             "sub_page_name" => "",
             "list_users" => User::where(['is_deleted' => 0])->whereHas('role', function ($query) {
                 return $query->where('name', '=', "Participant");
+            })->get(),
+            "list_teams" => Team::where(['is_deleted' => 0])->get()
+        ];
+
+        return view('pages/team/index', $data);
+    }
+
+    public function index_user()
+    {
+        $data = [
+            "page_name" => "Team",
+            "sub_page_name" => "",
+            "list_users" => User::where(['is_deleted' => 0])->whereHas('role', function ($query) {
+                return $query->where('name', '=', "Participant");
+            })->get(),
+            "list_teams" => Team::where(['is_deleted' => 0])->whereHas('user_teams', function ($query) {
+                return $query->where('user_id', '=', Auth::user()->id);
             })->get()
         ];
 
-        if (Gate::allows('isAdmin')) {
-            $data["list_teams"] = Team::where(['is_deleted' => 0])->get();
-        }else if(Gate::allows('isParticipant')){
-            $data["list_teams"] = Team::where(['is_deleted' => 0])->whereHas('user_teams', function ($query) {
-                return $query->where('user_id', '=', Auth::user()->id);
-            })->get();
-        }
-
-        return view('pages/team/index', $data);
+        return view('pages/team/index_user', $data);
     }
 
     

@@ -31,7 +31,7 @@ class AuthController extends Controller
                 if($user->role->name == 'Admin'){
                     return redirect()->intended('/user');
                 }else if($user->role->name == 'Participant'){
-                    return redirect()->intended('/team');
+                    return redirect()->intended('/team-user');
                 }
             }
         }
